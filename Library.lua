@@ -11400,7 +11400,7 @@ function Library:CreateWindow(WindowInfo)
         local TabRight
 
         Icon = Library:GetCustomIcon(Icon)
-        do
+do
             TabButton = New("TextButton", {
                 BackgroundColor3 = "MainColor",
                 BackgroundTransparency = 1,
@@ -11471,6 +11471,7 @@ function Library:CreateWindow(WindowInfo)
                 Padding = ButtonPadding,
                 Icon = TabIcon,
             })
+        end -- 👈 이 부분을 꼭 추가해 주세요!
 
             --// Tab Container \\--
             TabContainer = New("Frame", {
