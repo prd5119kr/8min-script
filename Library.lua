@@ -13910,7 +13910,6 @@ function Library:CreateLoading(LoadingInfo)
         warn("Loading GUI already exists, you cannot create multiple Loading GUIs.")
         return Library.ActiveLoading
     end
-end
 
     LoadingInfo = Library:Validate(LoadingInfo, Templates.Loading)
 
@@ -13933,7 +13932,9 @@ end
         ContentWidth = LoadingInfo.ContentWidth,
         SidebarWidth = LoadingInfo.SidebarWidth,
     }
-        end
+
+    return Loading
+end
     --// ScreenGui \\--
     local ScreenGui = New("ScreenGui", {
         Name = "ObsidianLoading",
