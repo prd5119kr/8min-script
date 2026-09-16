@@ -1,3 +1,15 @@
+
+-- 🔊 사운드 객체 미리 생성 (파일 맨 위에 배치)
+local HoverSound = Instance.new("Sound")
+HoverSound.SoundId = "rbxassetid://9061030012"
+HoverSound.Volume = 1
+HoverSound.Parent = game:GetService("SoundService")
+
+local ClickSound = Instance.new("Sound")
+ClickSound.SoundId = "rbxassetid://9061030012"
+ClickSound.Volume = 1
+ClickSound.Parent = game:GetService("SoundService")
+-- 끊어진 부분
 local cloneref = (cloneref or clonereference or function(instance: any)
     return instance
 end)
@@ -11472,15 +11484,6 @@ function Library:CreateWindow(WindowInfo)
                 Icon = TabIcon,
             })
              
-local HoverSound = Instance.new("Sound")
-HoverSound.SoundId = "rbxassetid://6895059766" -- 가벼운 틱/호버 사운드 ID
-HoverSound.Volume = 0.5
-HoverSound.Parent = game:GetService("SoundService")
-
-local ClickSound = Instance.new("Sound")
-ClickSound.SoundId = "rbxassetid://6895059766" -- 클릭 사운드 ID (원하는 ID로 변경 가능)
-ClickSound.Volume = 0.8
-ClickSound.Parent = game:GetService("SoundService")
 
         -- 👇 바로 여기에 효과음 코드를 넣어주세요!
         TabButton.MouseEnter:Connect(function()
