@@ -11471,7 +11471,7 @@ end
                 Padding = ButtonPadding,
                 Icon = TabIcon,
             })
-
+end
             --// Tab Container \\--
             TabContainer = New("Frame", {
                 BackgroundTransparency = 1,
