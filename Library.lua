@@ -13911,6 +13911,7 @@ function Library:CreateLoading(LoadingInfo)
         warn("Loading GUI already exists, you cannot create multiple Loading GUIs.")
         return Library.ActiveLoading
     end
+end
 
     LoadingInfo = Library:Validate(LoadingInfo, Templates.Loading)
 
