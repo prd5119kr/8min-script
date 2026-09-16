@@ -11400,7 +11400,17 @@ function Library:CreateWindow(WindowInfo)
         local TabRight
 
         Icon = Library:GetCustomIcon(Icon)
-do
+local TabButton: TextButton
+        local TabIndicator
+        local TabLabel
+        local TabIcon
+
+        local TabContainer
+        local TabLeft
+        local TabRight
+
+        Icon = Library:GetCustomIcon(Icon)
+        do
             TabButton = New("TextButton", {
                 BackgroundColor3 = "MainColor",
                 BackgroundTransparency = 1,
@@ -11423,13 +11433,6 @@ do
                     Size = UDim2.fromOffset(TabButtonsStyle.IndicatorWidth, TabButtonsStyle.IndicatorHeight),
                     Parent = TabButton,
                 })
-
-                New("UICorner", {
-                    CornerRadius = UDim.new(1, 0),
-                    Parent = TabIndicator,
-                })
-            end
-        end
 
                 New("UICorner", {
                     CornerRadius = UDim.new(1, 0),
@@ -11478,6 +11481,7 @@ do
                 Padding = ButtonPadding,
                 Icon = TabIcon,
             })
+        end
 
             --// Tab Container \\--
             TabContainer = New("Frame", {
@@ -12727,7 +12731,7 @@ do
 
         return Tab
     end
-end
+
     function Window:AddKeyTab(...)
         local Name = nil
         local Icon = nil
