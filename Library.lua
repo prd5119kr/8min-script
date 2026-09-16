@@ -11400,7 +11400,7 @@ function Library:CreateWindow(WindowInfo)
         local TabRight
 
         Icon = Library:GetCustomIcon(Icon)
-        do
+do
             TabButton = New("TextButton", {
                 BackgroundColor3 = "MainColor",
                 BackgroundTransparency = 1,
@@ -11417,9 +11417,9 @@ function Library:CreateWindow(WindowInfo)
             if TabButtonsStyle.Indicator then
                 TabIndicator = New("Frame", {
                     AnchorPoint = Vector2.new(0, 0.5),
-                    BackgroundColor3 = Color3.fromRGB(255, 255, 255), 
-                    BackgroundTransparency = 0, 
-                    Position = UDim2.new(0, 3, 0.5, 0),
+                    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+                    BackgroundTransparency = 0,
+                    Position = UDim2.new(0, 4, 0.5, 0),
                     Size = UDim2.fromOffset(TabButtonsStyle.IndicatorWidth, TabButtonsStyle.IndicatorHeight),
                     Parent = TabButton,
                 })
@@ -11429,6 +11429,7 @@ function Library:CreateWindow(WindowInfo)
                     Parent = TabIndicator,
                 })
             end
+        end
 
                 New("UICorner", {
                     CornerRadius = UDim.new(1, 0),
