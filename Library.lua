@@ -272,13 +272,13 @@ local Library = {
     DPIScale = 1,
     CornerRadius = 4,
 
---// Scheme \\--
+    --// Scheme \\--
     IsLightTheme = false,
     Scheme = {
-        BackgroundColor = Color3.fromRGB(0, 0, 0),
-        MainColor = Color3.fromRGB(18, 18, 18),
-        AccentColor = Color3.fromRGB(255, 255, 255),
-        OutlineColor = Color3.fromRGB(35, 35, 35),
+        BackgroundColor = Color3.fromRGB(15, 15, 15),
+        MainColor = Color3.fromRGB(25, 25, 25),
+        AccentColor = Color3.fromRGB(125, 85, 255),
+        OutlineColor = Color3.fromRGB(40, 40, 40),
         FontColor = Color3.new(1, 1, 1),
         Font = Font.fromEnum(Enum.Font.Code),
 
@@ -288,7 +288,7 @@ local Library = {
         WhiteColor = Color3.new(1, 1, 1),
 
         BackgroundImage = ""
-    }, -- <-- Scheme 테이블은 여기서 딱 한 번만 닫혀야 합니다!
+    },
 
     --// Registry \\--
     Registry = {},
@@ -434,12 +434,12 @@ local Templates = {
         TabSwipeOffset = 26,
         TabSwipeFrom = "bottom",
         TabButtonsStyle = {
-            Gap = 4,                
-            Padding = 8,             
-            CornerRadius = 6,        
-            Indicator = true,        
-            IndicatorWidth = 2,      
-            IndicatorHeight = 20,    
+            Gap = 0,
+            Padding = 0,
+            CornerRadius = 0,
+            Indicator = false,
+            IndicatorWidth = 2,
+            IndicatorHeight = 20,
         },
     },
     Groupbox = {
@@ -11399,78 +11399,78 @@ function Library:CreateWindow(WindowInfo)
         local TabLeft
         local TabRight
 
-Icon = Library:GetCustomIcon(Icon)
+        Icon = Library:GetCustomIcon(Icon)
+        do
+            TabButton = New("TextButton", {
+                BackgroundColor3 = "MainColor",
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 40),
+                Text = "",
+                LayoutOrder = Order,
+                Parent = Tabs,
+            })
+            New("UICorner", {
+                CornerRadius = UDim.new(0, TabButtonsStyle.CornerRadius),
+                Parent = TabButton,
+            })
 
-        TabButton = New("TextButton", {
-            BackgroundColor3 = "MainColor",
-            BackgroundTransparency = 1,
-            Size = UDim2.new(1, 0, 0, 40),
-            Text = "",
-            LayoutOrder = Order,
-            Parent = Tabs,
-        })
-        New("UICorner", {
-            CornerRadius = UDim.new(0, TabButtonsStyle.CornerRadius),
-            Parent = TabButton,
-        })
+            if TabButtonsStyle.Indicator then
+                TabIndicator = New("Frame", {
+                    AnchorPoint = Vector2.new(1, 0.5),
+                    BackgroundColor3 = "AccentColor",
+                    BackgroundTransparency = 1,
+                    Position = UDim2.new(0, -2, 0.5, 0),
+                    Size = UDim2.fromOffset(TabButtonsStyle.IndicatorWidth, TabButtonsStyle.IndicatorHeight),
+                    Parent = TabButton,
+                })
 
-if TabButtonsStyle.Indicator then
-    TabIndicator = New("Frame", {
-        AnchorPoint = Vector2.new(1, 0.5),
-        BackgroundColor3 = "AccentColor",
-        BackgroundTransparency = 1,
-        Position = UDim2.new(0, -2, 0.5, 0),
-        Size = UDim2.fromOffset(TabButtonsStyle.IndicatorWidth, TabButtonsStyle.IndicatorHeight),
-        Parent = TabButton,
-    })
+                New("UICorner", {
+                    CornerRadius = UDim.new(1, 0),
+                    Parent = TabIndicator,
+                })
+            end
 
-    New("UICorner", {
-        CornerRadius = UDim.new(1, 0),
-        Parent = TabIndicator,
-    })
-end
-
-        local ButtonHolder = New("Frame", {
-            BackgroundTransparency = 1,
-            Size = UDim2.fromScale(1, 1),
-            Parent = TabButton,
-        })
-        local ButtonPadding = New("UIPadding", {
-            PaddingBottom = UDim.new(0, IsCompact and 6 or 11),
-            PaddingLeft = UDim.new(0, IsCompact and 6 or 12),
-            PaddingRight = UDim.new(0, IsCompact and 6 or 12),
-            PaddingTop = UDim.new(0, IsCompact and 6 or 11),
-            Parent = ButtonHolder,
-        })
-        TabLabel = New("TextLabel", {
-            BackgroundTransparency = 1,
-            Position = UDim2.fromOffset(30, 0),
-            Size = UDim2.new(1, -30, 1, 0),
-            Text = Name,
-            TextSize = 16,
-            TextTransparency = 0.5,
-            TextXAlignment = Enum.TextXAlignment.Left,
-            Visible = not IsCompact,
-            Parent = ButtonHolder,
-        })
-
-        if Icon then
-            TabIcon = New("ImageLabel", {
-                ImageColor3 = Icon.Custom and "WhiteColor" or "AccentColor",
-                ImageTransparency = 0.5,
-                ScaleType = Enum.ScaleType.Fit,
+            local ButtonHolder = New("Frame", {
+                BackgroundTransparency = 1,
                 Size = UDim2.fromScale(1, 1),
-                SizeConstraint = IsCompact and Enum.SizeConstraint.RelativeXY or Enum.SizeConstraint.RelativeYY,
+                Parent = TabButton,
+            })
+            local ButtonPadding = New("UIPadding", {
+                PaddingBottom = UDim.new(0, IsCompact and 6 or 11),
+                PaddingLeft = UDim.new(0, IsCompact and 6 or 12),
+                PaddingRight = UDim.new(0, IsCompact and 6 or 12),
+                PaddingTop = UDim.new(0, IsCompact and 6 or 11),
                 Parent = ButtonHolder,
             })
-            Library:ApplyLucideIcon(TabIcon, Icon)
-        end
+            TabLabel = New("TextLabel", {
+                BackgroundTransparency = 1,
+                Position = UDim2.fromOffset(30, 0),
+                Size = UDim2.new(1, -30, 1, 0),
+                Text = Name,
+                TextSize = 16,
+                TextTransparency = 0.5,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                Visible = not IsCompact,
+                Parent = ButtonHolder,
+            })
 
-        table.insert(Library.TabButtons, {
-            Label = TabLabel,
-            Padding = ButtonPadding,
-            Icon = TabIcon,
-        })
+            if Icon then
+                TabIcon = New("ImageLabel", {
+                    ImageColor3 = Icon.Custom and "WhiteColor" or "AccentColor",
+                    ImageTransparency = 0.5,
+                    ScaleType = Enum.ScaleType.Fit,
+                    Size = UDim2.fromScale(1, 1),
+                    SizeConstraint = IsCompact and Enum.SizeConstraint.RelativeXY or Enum.SizeConstraint.RelativeYY,
+                    Parent = ButtonHolder,
+                })
+                Library:ApplyLucideIcon(TabIcon, Icon)
+            end
+
+            table.insert(Library.TabButtons, {
+                Label = TabLabel,
+                Padding = ButtonPadding,
+                Icon = TabIcon,
+            })
 
             --// Tab Container \\--
             TabContainer = New("Frame", {
@@ -13933,8 +13933,6 @@ function Library:CreateLoading(LoadingInfo)
         SidebarWidth = LoadingInfo.SidebarWidth,
     }
 
-    return Loading
-end
     --// ScreenGui \\--
     local ScreenGui = New("ScreenGui", {
         Name = "ObsidianLoading",
