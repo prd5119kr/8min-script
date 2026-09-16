@@ -11414,21 +11414,21 @@ Icon = Library:GetCustomIcon(Icon)
             Parent = TabButton,
         })
 
-        if TabButtonsStyle.Indicator then
-            TabIndicator = New("Frame", {
-                AnchorPoint = Vector2.new(1, 0.5),
-                BackgroundColor3 = "AccentColor",
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0, -2, 0.5, 0),
-                Size = UDim2.fromOffset(TabButtonsStyle.IndicatorWidth, TabButtonsStyle.IndicatorHeight),
-                Parent = TabButton,
-            })
+if TabButtonsStyle.Indicator then
+    TabIndicator = New("Frame", {
+        AnchorPoint = Vector2.new(1, 0.5),
+        BackgroundColor3 = "AccentColor",
+        BackgroundTransparency = 1,
+        Position = UDim2.new(0, -2, 0.5, 0),
+        Size = UDim2.fromOffset(TabButtonsStyle.IndicatorWidth, TabButtonsStyle.IndicatorHeight),
+        Parent = TabButton,
+    })
 
-            New("UICorner", {
-                CornerRadius = UDim.new(1, 0),
-                Parent = TabIndicator,
-            })
-        end
+    New("UICorner", {
+        CornerRadius = UDim.new(1, 0),
+        Parent = TabIndicator,
+    })
+end
 
         local ButtonHolder = New("Frame", {
             BackgroundTransparency = 1,
