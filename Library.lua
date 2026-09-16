@@ -272,13 +272,13 @@ local Library = {
     DPIScale = 1,
     CornerRadius = 4,
 
-    --// Scheme \\--
+--// Scheme \\--
     IsLightTheme = false,
     Scheme = {
-        BackgroundColor = Color3.fromRGB(15, 15, 15),
-        MainColor = Color3.fromRGB(25, 25, 25),
-        AccentColor = Color3.fromRGB(125, 85, 255),
-        OutlineColor = Color3.fromRGB(40, 40, 40),
+        BackgroundColor = Color3.fromRGB(0, 0, 0),
+        MainColor = Color3.fromRGB(18, 18, 18),
+        AccentColor = Color3.fromRGB(255, 255, 255),
+        OutlineColor = Color3.fromRGB(35, 35, 35),
         FontColor = Color3.new(1, 1, 1),
         Font = Font.fromEnum(Enum.Font.Code),
 
@@ -288,7 +288,7 @@ local Library = {
         WhiteColor = Color3.new(1, 1, 1),
 
         BackgroundImage = ""
-    },
+    }, -- <-- Scheme 테이블은 여기서 딱 한 번만 닫혀야 합니다!
 
     --// Registry \\--
     Registry = {},
@@ -434,12 +434,12 @@ local Templates = {
         TabSwipeOffset = 26,
         TabSwipeFrom = "bottom",
         TabButtonsStyle = {
-            Gap = 0,
-            Padding = 0,
-            CornerRadius = 0,
-            Indicator = false,
-            IndicatorWidth = 2,
-            IndicatorHeight = 20,
+            Gap = 4,                
+            Padding = 8,             
+            CornerRadius = 6,        
+            Indicator = true,        
+            IndicatorWidth = 2,      
+            IndicatorHeight = 20,    
         },
     },
     Groupbox = {
