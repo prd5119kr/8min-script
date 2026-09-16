@@ -11410,7 +11410,7 @@ local TabButton: TextButton
         local TabRight
 
         Icon = Library:GetCustomIcon(Icon)
-        do
+      do
             TabButton = New("TextButton", {
                 BackgroundColor3 = "MainColor",
                 BackgroundTransparency = 1,
@@ -11439,6 +11439,7 @@ local TabButton: TextButton
                     Parent = TabIndicator,
                 })
             end
+        end -- 👈 이 do 블록을 닫아주는 최종 end가 딱 맞는지 확인해야 합니다!
 
             local ButtonHolder = New("Frame", {
                 BackgroundTransparency = 1,
