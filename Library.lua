@@ -13932,7 +13932,9 @@ function Library:CreateLoading(LoadingInfo)
         ContentWidth = LoadingInfo.ContentWidth,
         SidebarWidth = LoadingInfo.SidebarWidth,
     }
-
+        end
+    end
+end
     --// ScreenGui \\--
     local ScreenGui = New("ScreenGui", {
         Name = "ObsidianLoading",
