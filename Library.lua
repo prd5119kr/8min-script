@@ -11400,17 +11400,7 @@ function Library:CreateWindow(WindowInfo)
         local TabRight
 
         Icon = Library:GetCustomIcon(Icon)
-local TabButton: TextButton
-        local TabIndicator
-        local TabLabel
-        local TabIcon
-
-        local TabContainer
-        local TabLeft
-        local TabRight
-
-        Icon = Library:GetCustomIcon(Icon)
-      do
+        do
             TabButton = New("TextButton", {
                 BackgroundColor3 = "MainColor",
                 BackgroundTransparency = 1,
@@ -11426,10 +11416,10 @@ local TabButton: TextButton
 
             if TabButtonsStyle.Indicator then
                 TabIndicator = New("Frame", {
-                    AnchorPoint = Vector2.new(0, 0.5),
-                    BackgroundColor3 = Color3.fromRGB(255, 255, 255),
-                    BackgroundTransparency = 0,
-                    Position = UDim2.new(0, 4, 0.5, 0),
+                    AnchorPoint = Vector2.new(1, 0.5),
+                    BackgroundColor3 = "AccentColor",
+                    BackgroundTransparency = 1,
+                    Position = UDim2.new(0, -2, 0.5, 0),
                     Size = UDim2.fromOffset(TabButtonsStyle.IndicatorWidth, TabButtonsStyle.IndicatorHeight),
                     Parent = TabButton,
                 })
@@ -11439,7 +11429,6 @@ local TabButton: TextButton
                     Parent = TabIndicator,
                 })
             end
-        end -- 👈 이 do 블록을 닫아주는 최종 end가 딱 맞는지 확인해야 합니다!
 
             local ButtonHolder = New("Frame", {
                 BackgroundTransparency = 1,
@@ -11482,7 +11471,6 @@ local TabButton: TextButton
                 Padding = ButtonPadding,
                 Icon = TabIcon,
             })
-        end
 
             --// Tab Container \\--
             TabContainer = New("Frame", {
