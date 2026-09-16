@@ -11429,7 +11429,7 @@ function Library:CreateWindow(WindowInfo)
                     Parent = TabIndicator,
                 })
             end
-
+end
             local ButtonHolder = New("Frame", {
                 BackgroundTransparency = 1,
                 Size = UDim2.fromScale(1, 1),
