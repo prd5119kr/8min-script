@@ -1,15 +1,3 @@
-
--- 🔊 사운드 객체 미리 생성 (파일 맨 위에 배치)
-local HoverSound = Instance.new("Sound")
-HoverSound.SoundId = "rbxassetid://9061030012"
-HoverSound.Volume = 1
-HoverSound.Parent = game:GetService("SoundService")
-
-local ClickSound = Instance.new("Sound")
-ClickSound.SoundId = "rbxassetid://9061030012"
-ClickSound.Volume = 1
-ClickSound.Parent = game:GetService("SoundService")
--- 끊어진 부분
 local cloneref = (cloneref or clonereference or function(instance: any)
     return instance
 end)
@@ -334,7 +322,38 @@ else
     Library.IsMobile = (Library.DevicePlatform == Enum.Platform.Android or Library.DevicePlatform == Enum.Platform.IOS)
     Library.OriginalMinSize = Library.IsMobile and Vector2.new(480, 240) or Vector2.new(480, 360)
 end
+--// Sound Effects \\--
 
+local SoundService = game:GetService("SoundService")
+
+Library.Sounds = {
+    Hover = "rbxassetid://6042053626",
+    Click = "rbxassetid://6042081097",
+}
+
+local HoverSound = Instance.new("Sound")
+HoverSound.SoundId = Library.Sounds.Hover
+HoverSound.Volume = 0.4
+HoverSound.Parent = SoundService
+
+local ClickSound = Instance.new("Sound")
+ClickSound.SoundId = Library.Sounds.Click
+ClickSound.Volume = 0.5
+ClickSound.Parent = SoundService
+
+function Library:PlayHoverSound()
+    if Library.Muted then return end
+    HoverSound.PlaybackSpeed = 0.95 + math.random() * 0.1
+    HoverSound:Play()
+end
+
+function Library:PlayClickSound()
+    if Library.Muted then return end
+    ClickSound.PlaybackSpeed = 0.95 + math.random() * 0.1
+    ClickSound:Play()
+end
+
+--// Templates \\--
 local Templates = {
     --// UI \\--
     Frame = {
