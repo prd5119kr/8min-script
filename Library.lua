@@ -12727,7 +12727,7 @@ do
 
         return Tab
     end
-
+end
     function Window:AddKeyTab(...)
         local Name = nil
         local Icon = nil
