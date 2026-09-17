@@ -327,9 +327,9 @@ end
 local SoundService = game:GetService("SoundService")
 
 Library.Sounds = {
-    Hover = "rbxassetid://87437544236708",
-    Click = "rbxassetid://87437544236708",
-    Toggle = "rbxassetid://87437544236708", -- 👈 토글용 소스를 따로 넣고 싶다면 추가
+    Hover = "rbxassetid://100809160609628",
+    Click = "rbxassetid://100809160609628",
+    Loading = "rbxassetid://140207837688369", -- 👈 로딩 사운드 ID 추가
 }
 
 local HoverSound = Instance.new("Sound")
@@ -342,11 +342,11 @@ ClickSound.SoundId = Library.Sounds.Click
 ClickSound.Volume = 0.5
 ClickSound.Parent = SoundService
 
--- 🔊 토글 사운드 객체도 추가하기
-local ToggleSound = Instance.new("Sound")
-ToggleSound.SoundId = Library.Sounds.Toggle
-ToggleSound.Volume = 0.5
-ToggleSound.Parent = SoundService
+-- 🔊 로딩 사운드 객체 생성
+local LoadingSound = Instance.new("Sound")
+LoadingSound.SoundId = Library.Sounds.Loading
+LoadingSound.Volume = 0.6
+LoadingSound.Parent = SoundService
 
 function Library:PlayHoverSound()
     if Library.Muted then return end
@@ -360,11 +360,10 @@ function Library:PlayClickSound()
     ClickSound:Play()
 end
 
--- 🔊 토글 재생 함수 추가하기
-function Library:PlayToggleSound()
+-- 🔊 로딩 사운드 재생 함수 추가
+function Library:PlayLoadingSound()
     if Library.Muted then return end
-    ToggleSound.PlaybackSpeed = 0.95 + math.random() * 0.1
-    ToggleSound:Play()
+    LoadingSound:Play()
 end
 
 --// Templates \\--
