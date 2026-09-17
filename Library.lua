@@ -328,7 +328,7 @@ local SoundService = game:GetService("SoundService")
 
 Library.Sounds = {
     Hover = "rbxassetid://6042053626",
-    Click = "rbxassetid://6042081097",
+    Click = "rbxassetid://87437544236708",
 }
 
 local HoverSound = Instance.new("Sound")
