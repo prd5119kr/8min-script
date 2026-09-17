@@ -327,7 +327,7 @@ end
 local SoundService = game:GetService("SoundService")
 
 Library.Sounds = {
-    Hover = "rbxassetid://6042053626",
+    Hover = "rbxassetid://87437544236708",
     Click = "rbxassetid://87437544236708",
 }
 
