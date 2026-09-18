@@ -1744,8 +1744,8 @@ Library.Overlay = Overlay
 
 --// Cursor
 local Cursor
-local CursorCross
-local InnerCross = {}
+local CursorCircle
+local InnerCircle
 local CursorCustomImage
 do
     Cursor = New("Frame", {
@@ -1757,47 +1757,33 @@ do
         Parent = ScreenGui,
     })
 
-    CursorCross = New("Frame", {
+    -- 바깥쪽 원 (테두리)
+    CursorCircle = New("Frame", {
         AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundTransparency = 1,
+        BackgroundColor3 = "DarkColor",
         Position = UDim2.fromScale(0.5, 0.5),
         Size = UDim2.fromOffset(11, 11),
+        ZIndex = 1,
         Parent = Cursor,
     })
-
-    New("Frame", {
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundColor3 = "DarkColor",
-        Position = UDim2.fromScale(0.5, 0.5),
-        Size = UDim2.new(1, 0, 0, 3),
-        ZIndex = 1,
-        Parent = CursorCross,
+    New("UICorner", {
+        CornerRadius = UDim.new(1, 0),
+        Parent = CursorCircle,
     })
-    table.insert(InnerCross, New("Frame", {
+
+    -- 안쪽 원 (실제 보이는 흰색 부분)
+    InnerCircle = New("Frame", {
         AnchorPoint = Vector2.new(0.5, 0.5),
         BackgroundColor3 = "WhiteColor",
         Position = UDim2.fromScale(0.5, 0.5),
-        Size = UDim2.new(1, -2, 0, 1),
+        Size = UDim2.fromOffset(9, 9),   -- 바깥보다 살짝 작게 (테두리 두께 = (11-9)/2 = 1px)
         ZIndex = 2,
-        Parent = CursorCross,
-    }))
-
-    New("Frame", {
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundColor3 = "DarkColor",
-        Position = UDim2.fromScale(0.5, 0.5),
-        Size = UDim2.new(0, 3, 1, 0),
-        ZIndex = 1,
-        Parent = CursorCross,
+        Parent = CursorCircle,
     })
-    table.insert(InnerCross, New("Frame", {
-        AnchorPoint = Vector2.new(0.5, 0.5),
-        BackgroundColor3 = "WhiteColor",
-        Position = UDim2.fromScale(0.5, 0.5),
-        Size = UDim2.new(0, 1, 1, -2),
-        ZIndex = 2,
-        Parent = CursorCross,
-    }))
+    New("UICorner", {
+        CornerRadius = UDim.new(1, 0),
+        Parent = InnerCircle,
+    })
 
     CursorCustomImage = New("ImageLabel", {
         AnchorPoint = Vector2.new(0.5, 0.5),
