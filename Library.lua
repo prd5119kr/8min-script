@@ -272,23 +272,24 @@ local Library = {
     DPIScale = 1,
     CornerRadius = 4,
 
---// Scheme (스크린샷 스타일의 고급스러운 다크 테마) \\--
-    IsLightTheme = false,
-    Scheme = {
-        BackgroundColor = Color3.fromRGB(15, 15, 18),   -- 완전 검은색 대신 아주 어두운 차콜 톤
-        MainColor = Color3.fromRGB(22, 22, 26),       -- 메인 패널 배경
-        AccentColor = Color3.fromRGB(255, 255, 255),  -- 포인트 컬러 (흰색)
-        OutlineColor = Color3.fromRGB(45, 45, 52),     -- 테두리선을 조금 더 부드럽고 선명하게
-        FontColor = Color3.fromRGB(240, 240, 240),    -- 글자 색상
-        Font = Font.fromEnum(Enum.Font.Code),
+IsLightTheme = false,
+        Scheme = {
+            BackgroundColor = Color3.fromRGB(15, 15, 18),    -- 완전 검은색 대신 아주 어두운 차콜 톤
+            MainColor = Color3.fromRGB(22, 22, 26),        -- 메인 패널 배경
+            AccentColor = Color3.fromRGB(255, 255, 255),  -- 포인트 컬러 (흰색)
+            OutlineColor = Color3.fromRGB(45, 45, 52),     -- 테두리선
+            FontColor = Color3.fromRGB(240, 240, 240),    -- 글자 색상
+            Font = Font.fromEnum(Enum.Font.Code),
 
-        RedColor = Color3.fromRGB(255, 50, 50),
-        DestructiveColor = Color3.fromRGB(220, 38, 38),
-        DarkColor = Color3.fromRGB(10, 10, 12),
-        WhiteColor = Color3.new(1, 1, 1),
+            RedColor = Color3.fromRGB(255, 50, 50),
+            DestructiveColor = Color3.fromRGB(220, 38, 38),
+            DarkColor = Color3.fromRGB(10, 10, 12),
+            WhiteColor = Color3.new(1, 1, 1),
 
-        BackgroundImage = ""
-    },
+            BackgroundImage = ""
+        }
+    })
+
 
     --// Registry \\--
     Registry = {},
