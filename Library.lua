@@ -272,12 +272,12 @@ local Library = {
     DPIScale = 1,
     CornerRadius = 4,
 
-IsLightTheme = false,
+        IsLightTheme = false,
         Scheme = {
             BackgroundColor = Color3.fromRGB(15, 15, 18),    -- 완전 검은색 대신 아주 어두운 차콜 톤
             MainColor = Color3.fromRGB(22, 22, 26),        -- 메인 패널 배경
             AccentColor = Color3.fromRGB(255, 255, 255),  -- 포인트 컬러 (흰색)
-            OutlineColor = Color3.fromRGB(45, 45, 52),     -- 테두리선
+            OutlineColor = Color3.fromRGB(45, 45, 52),     -- 테두리선을 조금 더 부드럽고 선명하게
             FontColor = Color3.fromRGB(240, 240, 240),    -- 글자 색상
             Font = Font.fromEnum(Enum.Font.Code),
 
@@ -287,8 +287,7 @@ IsLightTheme = false,
             WhiteColor = Color3.new(1, 1, 1),
 
             BackgroundImage = ""
-        }
-    })
+    }, 
 
 
     --// Registry \\--
