@@ -366,6 +366,197 @@ function Library:PlayLoadingSound()
     LoadingSound:Play()
 end
 
+
+--// UI Components (Instance.new 기반, New() 의존 없음) \\--
+
+local function CreateCollapsibleSection(Parent, Title, Icon)
+    local SectionFrame = Instance.new("Frame")
+    SectionFrame.BackgroundColor3 = Library.Scheme.MainColor
+    SectionFrame.Size = UDim2.new(1, 0, 0, 36)
+    SectionFrame.ClipsDescendants = true
+    SectionFrame.Parent = Parent
+
+    local SectionCorner = Instance.new("UICorner")
+    SectionCorner.CornerRadius = UDim.new(0, 8)
+    SectionCorner.Parent = SectionFrame
+    table.insert(Library.Corners, SectionCorner)
+
+    local SectionStroke = Instance.new("UIStroke")
+    SectionStroke.Color = Library.Scheme.OutlineColor
+    SectionStroke.Parent = SectionFrame
+
+    local Header = Instance.new("TextButton")
+    Header.BackgroundTransparency = 1
+    Header.Size = UDim2.new(1, 0, 0, 36)
+    Header.Text = ""
+    Header.AutoButtonColor = false
+    Header.Parent = SectionFrame
+
+    if Icon and Icon ~= "" then
+        local IconLabel = Instance.new("ImageLabel")
+        IconLabel.Image = Icon
+        IconLabel.Size = UDim2.fromOffset(16, 16)
+        IconLabel.Position = UDim2.fromOffset(12, 10)
+        IconLabel.BackgroundTransparency = 1
+        IconLabel.ImageColor3 = Library.Scheme.FontColor
+        IconLabel.Parent = Header
+    end
+
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Text = Title
+    TitleLabel.Font = Library.Scheme.Font
+    TitleLabel.TextSize = 14
+    TitleLabel.TextColor3 = Library.Scheme.FontColor
+    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TitleLabel.Position = UDim2.fromOffset((Icon and Icon ~= "") and 36 or 12, 0)
+    TitleLabel.Size = UDim2.new(1, -56, 1, 0)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Parent = Header
+
+    local ChevronIcon = Instance.new("ImageLabel")
+    ChevronIcon.Image = "rbxassetid://10709790948"
+    ChevronIcon.Size = UDim2.fromOffset(14, 14)
+    ChevronIcon.AnchorPoint = Vector2.new(1, 0.5)
+    ChevronIcon.Position = UDim2.new(1, -12, 0.5, 0)
+    ChevronIcon.BackgroundTransparency = 1
+    ChevronIcon.ImageColor3 = Library.Scheme.FontColor
+    ChevronIcon.Parent = Header
+
+    local Content = Instance.new("Frame")
+    Content.BackgroundTransparency = 1
+    Content.Position = UDim2.fromOffset(0, 36)
+    Content.Size = UDim2.new(1, 0, 0, 0)
+    Content.AutomaticSize = Enum.AutomaticSize.Y
+    Content.Parent = SectionFrame
+
+    local ContentLayout = Instance.new("UIListLayout")
+    ContentLayout.Padding = UDim.new(0, 6)
+    ContentLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    ContentLayout.Parent = Content
+
+    local ContentPadding = Instance.new("UIPadding")
+    ContentPadding.PaddingLeft = UDim.new(0, 12)
+    ContentPadding.PaddingRight = UDim.new(0, 12)
+    ContentPadding.PaddingBottom = UDim.new(0, 12)
+    ContentPadding.Parent = Content
+
+    local TweenService = game:GetService("TweenService")
+    local TweenInfoObj = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+    local Expanded = false
+    local function UpdateHeight()
+        local TargetHeight = Expanded and (36 + Content.AbsoluteSize.Y) or 36
+        TweenService:Create(SectionFrame, TweenInfoObj, {
+            Size = UDim2.new(1, 0, 0, TargetHeight),
+        }):Play()
+        TweenService:Create(ChevronIcon, TweenInfoObj, {
+            Rotation = Expanded and 180 or 0,
+        }):Play()
+    end
+
+    Header.MouseButton1Click:Connect(function()
+        Expanded = not Expanded
+        if Library.PlayClickSound then
+            Library:PlayClickSound()
+        end
+        UpdateHeight()
+    end)
+
+    if Library.PlayHoverSound then
+        Header.MouseEnter:Connect(function()
+            Library:PlayHoverSound()
+        end)
+    end
+
+    Content:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+        if Expanded then
+            UpdateHeight()
+        end
+    end)
+
+    return Content
+end
+
+local function CreateCheckItem(Parent, Text, Default)
+    local Item = Instance.new("TextButton")
+    Item.BackgroundTransparency = 1
+    Item.Size = UDim2.new(1, 0, 0, 24)
+    Item.Text = ""
+    Item.AutoButtonColor = false
+    Item.Parent = Parent
+
+    local Circle = Instance.new("Frame")
+    Circle.BackgroundColor3 = Library.Scheme.OutlineColor
+    Circle.Size = UDim2.fromOffset(16, 16)
+    Circle.Position = UDim2.fromOffset(0, 4)
+    Circle.Parent = Item
+
+    local CircleCorner = Instance.new("UICorner")
+    CircleCorner.CornerRadius = UDim.new(1, 0)
+    CircleCorner.Parent = Circle
+    table.insert(Library.Corners, CircleCorner)
+
+    local CircleStroke = Instance.new("UIStroke")
+    CircleStroke.Color = Library.Scheme.OutlineColor
+    CircleStroke.Parent = Circle
+
+    local CheckMark = Instance.new("ImageLabel")
+    CheckMark.Image = "rbxassetid://10709790948"
+    CheckMark.ImageColor3 = Library.Scheme.AccentColor
+    CheckMark.Size = UDim2.fromOffset(10, 10)
+    CheckMark.Position = UDim2.fromScale(0.5, 0.5)
+    CheckMark.AnchorPoint = Vector2.new(0.5, 0.5)
+    CheckMark.BackgroundTransparency = 1
+    CheckMark.Visible = Default or false
+    CheckMark.Parent = Circle
+
+    local TextLabel = Instance.new("TextLabel")
+    TextLabel.Text = Text
+    TextLabel.Font = Library.Scheme.Font
+    TextLabel.TextSize = 13
+    TextLabel.TextColor3 = Library.Scheme.FontColor
+    TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TextLabel.Position = UDim2.fromOffset(24, 0)
+    TextLabel.Size = UDim2.new(1, -24, 1, 0)
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.Parent = Item
+
+    local Value = Default or false
+    local Callbacks = {}
+
+    local function SetValue(NewValue)
+        Value = NewValue
+        CheckMark.Visible = Value
+        for _, CB in ipairs(Callbacks) do
+            task.spawn(CB, Value)
+        end
+    end
+
+    Item.MouseButton1Click:Connect(function()
+        if Library.PlayClickSound then
+            Library:PlayClickSound()
+        end
+        SetValue(not Value)
+    end)
+
+    if Library.PlayHoverSound then
+        Item.MouseEnter:Connect(function()
+            Library:PlayHoverSound()
+        end)
+    end
+
+    return {
+        Instance = Item,
+        SetValue = SetValue,
+        GetValue = function() return Value end,
+        OnChanged = function(_, CB)
+            table.insert(Callbacks, CB)
+        end,
+    }
+end
+
+
+    -- (원래 있던 Templates 내용 그대로 이어짐)
 --// Templates \\--
 local Templates = {
     --// UI \\--
