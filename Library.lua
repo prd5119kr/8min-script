@@ -263,7 +263,7 @@ local Library = {
     PopOutDragThreshold = 8,
     PopOutHoldTime = 0.15,
 
---// Signals \\--
+    --// Signals \\--
     Signals = {},
     UnloadSignals = {},
 
@@ -274,11 +274,11 @@ local Library = {
 
         IsLightTheme = false,
         Scheme = {
-            BackgroundColor = Color3.fromRGB(15, 15, 18),
-            MainColor = Color3.fromRGB(22, 22, 26),
-            AccentColor = Color3.fromRGB(255, 255, 255),
-            OutlineColor = Color3.fromRGB(45, 45, 52),
-            FontColor = Color3.fromRGB(240, 240, 240),
+            BackgroundColor = Color3.fromRGB(15, 15, 18),    -- 완전 검은색 대신 아주 어두운 차콜 톤
+            MainColor = Color3.fromRGB(22, 22, 26),        -- 메인 패널 배경
+            AccentColor = Color3.fromRGB(255, 255, 255),  -- 포인트 컬러 (흰색)
+            OutlineColor = Color3.fromRGB(45, 45, 52),     -- 테두리선을 조금 더 부드럽고 선명하게
+            FontColor = Color3.fromRGB(240, 240, 240),    -- 글자 색상
             Font = Font.fromEnum(Enum.Font.Code),
 
             RedColor = Color3.fromRGB(255, 50, 50),
@@ -287,7 +287,7 @@ local Library = {
             WhiteColor = Color3.new(1, 1, 1),
 
             BackgroundImage = ""
-    },
+    }, 
 
 
     --// Registry \\--
@@ -366,8 +366,6 @@ function Library:PlayLoadingSound()
     LoadingSound:Play()
 end
 
-
-
 --// Templates \\--
 local Templates = {
     --// UI \\--
@@ -421,7 +419,7 @@ local Templates = {
         Footer = "No Footer",
 
         Position = UDim2.fromOffset(6, 6),
-        Size = UDim2.fromOffset(600, 480),
+        Size = UDim2.fromOffset(720, 600),
         IconSize = UDim2.fromOffset(30, 30),
 
         AutoShow = true,
@@ -532,7 +530,17 @@ local Templates = {
         ContentWidth = 450,
         SidebarWidth = 250,
     },
+    Toggle = {
+        Text = "Toggle",
+        Default = false,
 
+        Callback = function() end,
+        Changed = function() end,
+
+        Risky = false,
+        Disabled = false,
+        Visible = true,
+    },
     Input = {
         Text = "Input",
         Default = "",
@@ -551,29 +559,23 @@ local Templates = {
         Disabled = false,
         Visible = true,
     },
---// 예시: 스크린샷과 같은 레이아웃의 섹션 두 개 구성 \\--
--- SomeTab 자리에 실제 사용하실 Tab 객체(예: Tabs.Player)를 넣으세요.
+    Slider = {
+        Text = "Slider",
+        Default = 0,
+        Min = 0,
+        Max = 100,
+        Rounding = 0,
 
-local ValuesSection = CreateCollapsibleSection(SomeTab.Container, "Values", "")
+        Prefix = "",
+        Suffix = "",
 
-local Slider1 = CreateSliderItem(ValuesSection, "Example Speed", 1, 10, 5, "x")
-local Slider2 = CreateSliderItem(ValuesSection, "Example Power", 0, 200, 50, " power")
-local Slider3 = CreateSliderItem(ValuesSection, "Example Rate", 1, 50, 1, "x")
-local Slider4 = CreateSliderItem(ValuesSection, "Example Rotation", 15, 1000, 15, "")
+        Callback = function() end,
+        Changed = function() end,
 
-local OptionsSection = CreateCollapsibleSection(SomeTab.Container, "Example Options", "")
+        Disabled = false,
+        Visible = true,
 
-local Toggle1 = CreateBadgeToggleItem(OptionsSection, "Option A", "None")
-local Toggle2 = CreateBadgeToggleItem(OptionsSection, "Option B", "None")
-local Toggle3 = CreateBadgeToggleItem(OptionsSection, "Option C", "None")
-local Toggle4 = CreateBadgeToggleItem(OptionsSection, "Option D", "None")
-local Toggle5 = CreateBadgeToggleItem(OptionsSection, "Option E", "None")
-local Toggle6 = CreateBadgeToggleItem(OptionsSection, "Option F", "None")
-
--- 값이 바뀔 때 실행할 로직은 여기 OnChanged로 연결하시면 됩니다
-Slider1:OnChanged(function(Value)
-    -- 예: print("Example Speed:", Value)
-end)
+        AllowRightClickInput = true
     },
     Dropdown = {
         Values = {},
