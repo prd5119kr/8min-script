@@ -263,31 +263,220 @@ local Library = {
     PopOutDragThreshold = 8,
     PopOutHoldTime = 0.15,
 
-    --// Signals \\--
-    Signals = {},
-    UnloadSignals = {},
+--[[
+    Obsidian UI Library - Collapsible Section & Checkbox Components
+    ------------------------------------------------------------
+    사용하신 Scheme (BackgroundColor, MainColor, AccentColor, OutlineColor,
+    FontColor)을 기준으로 작성되었습니다.
 
-    OriginalMinSize = Vector2.new(480, 360),
-    MinSize = Vector2.new(480, 360),
-    DPIScale = 1,
-    CornerRadius = 4,
+    이 파일은 독립적으로 동작하지 않습니다. 기존 Library.lua 안에서
+    Library 테이블 / New() 함수 / TweenService가 이미 정의된 뒤,
+    Templates 테이블이 정의되기 전 위치에 아래 두 함수를 붙여넣으세요.
+]]
 
-        IsLightTheme = false,
-        Scheme = {
-            BackgroundColor = Color3.fromRGB(15, 15, 18),    -- 완전 검은색 대신 아주 어두운 차콜 톤
-            MainColor = Color3.fromRGB(22, 22, 26),        -- 메인 패널 배경
-            AccentColor = Color3.fromRGB(255, 255, 255),  -- 포인트 컬러 (흰색)
-            OutlineColor = Color3.fromRGB(45, 45, 52),     -- 테두리선을 조금 더 부드럽고 선명하게
-            FontColor = Color3.fromRGB(240, 240, 240),    -- 글자 색상
-            Font = Font.fromEnum(Enum.Font.Code),
+--// UI Components \\--
 
-            RedColor = Color3.fromRGB(255, 50, 50),
-            DestructiveColor = Color3.fromRGB(220, 38, 38),
-            DarkColor = Color3.fromRGB(10, 10, 12),
-            WhiteColor = Color3.new(1, 1, 1),
+-- 1) 접었다 펴지는 섹션 (헤더 클릭 -> 화살표 회전 + 내용 펼침/접힘)
+local function CreateCollapsibleSection(Parent, Title, Icon)
+    local SectionFrame = New("Frame", {
+        BackgroundColor3 = "MainColor",
+        Size = UDim2.new(1, 0, 0, 36),
+        ClipsDescendants = true,
+        Parent = Parent,
+    })
+    table.insert(Library.Corners, New("UICorner", {
+        CornerRadius = UDim.new(0, 8),
+        Parent = SectionFrame,
+    }))
+    Library:AddOutline(SectionFrame)
 
-            BackgroundImage = ""
-    }, 
+    local Header = New("TextButton", {
+        BackgroundTransparency = 1,
+        Size = UDim2.new(1, 0, 0, 36),
+        Text = "",
+        AutoButtonColor = false,
+        Parent = SectionFrame,
+    })
+
+    if Icon and Icon ~= "" then
+        New("ImageLabel", {
+            Image = Icon,
+            Size = UDim2.fromOffset(16, 16),
+            Position = UDim2.fromOffset(12, 10),
+            BackgroundTransparency = 1,
+            ImageColor3 = "FontColor",
+            Parent = Header,
+        })
+    end
+
+    New("TextLabel", {
+        Text = Title,
+        Font = Library.Scheme.Font,
+        TextSize = 14,
+        TextColor3 = "FontColor",
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Position = UDim2.fromOffset((Icon and Icon ~= "") and 36 or 12, 0),
+        Size = UDim2.new(1, -56, 1, 0),
+        BackgroundTransparency = 1,
+        Parent = Header,
+    })
+
+    local ChevronIcon = New("ImageLabel", {
+        Image = "rbxassetid://10709790948", -- chevron-down 아이콘
+        Size = UDim2.fromOffset(14, 14),
+        AnchorPoint = Vector2.new(1, 0.5),
+        Position = UDim2.new(1, -12, 0.5, 0),
+        BackgroundTransparency = 1,
+        ImageColor3 = "FontColor",
+        Parent = Header,
+    })
+
+    local Content = New("Frame", {
+        BackgroundTransparency = 1,
+        Position = UDim2.fromOffset(0, 36),
+        Size = UDim2.new(1, 0, 0, 0),
+        AutomaticSize = Enum.AutomaticSize.Y,
+        Parent = SectionFrame,
+    })
+    New("UIListLayout", {
+        Padding = UDim.new(0, 6),
+        SortOrder = Enum.SortOrder.LayoutOrder,
+        Parent = Content,
+    })
+    New("UIPadding", {
+        PaddingLeft = UDim.new(0, 12),
+        PaddingRight = UDim.new(0, 12),
+        PaddingBottom = UDim.new(0, 12),
+        Parent = Content,
+    })
+
+    local Expanded = false
+    local function UpdateHeight()
+        local TargetHeight = Expanded and (36 + Content.AbsoluteSize.Y) or 36
+        TweenService:Create(SectionFrame, Library.TweenInfo, {
+            Size = UDim2.new(1, 0, 0, TargetHeight),
+        }):Play()
+        TweenService:Create(ChevronIcon, Library.TweenInfo, {
+            Rotation = Expanded and 180 or 0,
+        }):Play()
+    end
+
+    Header.MouseButton1Click:Connect(function()
+        Expanded = not Expanded
+        if Library.PlayClickSound then
+            Library:PlayClickSound()
+        end
+        UpdateHeight()
+    end)
+
+    if Library.PlayHoverSound then
+        Header.MouseEnter:Connect(function()
+            Library:PlayHoverSound()
+        end)
+    end
+
+    Content:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+        if Expanded then
+            UpdateHeight()
+        end
+    end)
+
+    return Content -- 이 Content 안에 CreateCheckItem 등을 Parent로 넣으면 됨
+end
+
+-- 2) 체크박스 한 줄짜리 리스트 아이템
+local function CreateCheckItem(Parent, Text, Default)
+    local Item = New("TextButton", {
+        BackgroundTransparency = 1,
+        Size = UDim2.new(1, 0, 0, 24),
+        Text = "",
+        AutoButtonColor = false,
+        Parent = Parent,
+    })
+
+    local Circle = New("Frame", {
+        BackgroundColor3 = "OutlineColor",
+        Size = UDim2.fromOffset(16, 16),
+        Position = UDim2.fromOffset(0, 4),
+        Parent = Item,
+    })
+    table.insert(Library.Corners, New("UICorner", { CornerRadius = UDim.new(1, 0), Parent = Circle }))
+    Library:AddOutline(Circle)
+
+    local CheckMark = New("ImageLabel", {
+        Image = "rbxassetid://10709790948",
+        ImageColor3 = "AccentColor",
+        Size = UDim2.fromOffset(10, 10),
+        Position = UDim2.fromScale(0.5, 0.5),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundTransparency = 1,
+        Visible = Default or false,
+        Parent = Circle,
+    })
+
+    New("TextLabel", {
+        Text = Text,
+        Font = Library.Scheme.Font,
+        TextSize = 13,
+        TextColor3 = "FontColor",
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Position = UDim2.fromOffset(24, 0),
+        Size = UDim2.new(1, -24, 1, 0),
+        BackgroundTransparency = 1,
+        Parent = Item,
+    })
+
+    local Value = Default or false
+    local Callbacks = {}
+
+    local function SetValue(NewValue)
+        Value = NewValue
+        CheckMark.Visible = Value
+        for _, CB in ipairs(Callbacks) do
+            task.spawn(CB, Value)
+        end
+    end
+
+    Item.MouseButton1Click:Connect(function()
+        if Library.PlayClickSound then
+            Library:PlayClickSound()
+        end
+        SetValue(not Value)
+    end)
+
+    if Library.PlayHoverSound then
+        Item.MouseEnter:Connect(function()
+            Library:PlayHoverSound()
+        end)
+    end
+
+    return {
+        Instance = Item,
+        SetValue = SetValue,
+        GetValue = function() return Value end,
+        OnChanged = function(_, CB)
+            table.insert(Callbacks, CB)
+        end,
+    }
+end
+
+--[[
+    사용 예시:
+
+    local Section = CreateCollapsibleSection(SomeTab.Container, "Options", "")
+
+    local ItemA = CreateCheckItem(Section, "Option A")
+    local ItemB = CreateCheckItem(Section, "Option B", true) -- 기본값 켜짐
+
+    ItemA:OnChanged(function(Value)
+        print("Option A:", Value)
+    end)
+]]
+
+return {
+    CreateCollapsibleSection = CreateCollapsibleSection,
+    CreateCheckItem = CreateCheckItem,
+}
 
 
     --// Registry \\--
