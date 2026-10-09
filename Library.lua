@@ -322,6 +322,7 @@ else
     Library.IsMobile = (Library.DevicePlatform == Enum.Platform.Android or Library.DevicePlatform == Enum.Platform.IOS)
     Library.OriginalMinSize = Library.IsMobile and Vector2.new(480, 240) or Vector2.new(480, 360)
 end
+
 --// Sound Effects \\--
 -- 기존 "--// Sound Effects \\--" 블록 전체를 이걸로 교체하세요.
 -- (Templates 테이블 정의 바로 위)
@@ -337,7 +338,7 @@ Library.Sounds = {
 -- 소리별 설정: 호버는 작고 높은 톤 / 클릭은 크고 낮은 톤으로 확실히 구분
 Library.SoundSettings = {
     Hover = { Volume = 0.25, Pitch = 1.35, PitchRandom = 0.06, Cooldown = 0.05 },
-    Click = { Volume = 0.65, Pitch = 0.9,  PitchRandom = 0.04 },
+    Click = { Volume = 0.65, Pitch = 0.9,  PitchRandom = 0.04, Cooldown = 0.12 },
     Loading = { Volume = 0.6, Pitch = 1 },
 }
 
@@ -360,15 +361,20 @@ LoadingSound.Volume = Library.SoundSettings.Loading.Volume
 LoadingSound.Parent = SoundService
 
 local LastHoverTime = 0
+local LastClickTime = 0
 
 function Library:PlayHoverSound()
     if Library.Muted then return end
 
     local Settings = Library.SoundSettings.Hover
     local Now = tick()
-    if Now - LastHoverTime < Settings.Cooldown then return end -- 연속 호버 소리 겹침 방지
+
+    -- 호버 쿨다운 + 클릭 직후 0.15초는 호버 소리 금지
+    if Now - LastHoverTime < Settings.Cooldown then return end
+    if Now - LastClickTime < 0.15 then return end
     LastHoverTime = Now
 
+    HoverSound:Stop()
     HoverSound.Volume = Settings.Volume
     HoverSound.PlaybackSpeed = Settings.Pitch + (math.random() - 0.5) * 2 * Settings.PitchRandom
     HoverSound.TimePosition = 0
@@ -379,9 +385,14 @@ function Library:PlayClickSound()
     if Library.Muted then return end
 
     local Settings = Library.SoundSettings.Click
+    local Now = tick()
 
-    HoverSound:Stop() -- 클릭할 때 호버 소리가 같이 남아있지 않게 끊음
+    -- 같은 클릭에서 여러 번 호출돼도 한 번만 재생
+    if Now - LastClickTime < Settings.Cooldown then return end
+    LastClickTime = Now
 
+    HoverSound:Stop()
+    ClickSound:Stop()
     ClickSound.Volume = Settings.Volume
     ClickSound.PlaybackSpeed = Settings.Pitch + (math.random() - 0.5) * 2 * Settings.PitchRandom
     ClickSound.TimePosition = 0
@@ -393,8 +404,11 @@ function Library:PlayLoadingSound()
 
     LoadingSound.Volume = Library.SoundSettings.Loading.Volume
     LoadingSound.PlaybackSpeed = Library.SoundSettings.Loading.Pitch
+    LoadingSound:Stop()
+    LoadingSound.TimePosition = 0
     LoadingSound:Play()
 end
+
     --// Library \\--
     Window = {
         Title = "No Title",
