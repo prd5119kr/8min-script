@@ -323,96 +323,78 @@ else
     Library.OriginalMinSize = Library.IsMobile and Vector2.new(480, 240) or Vector2.new(480, 360)
 end
 --// Sound Effects \\--
+-- 기존 "--// Sound Effects \\--" 블록 전체를 이걸로 교체하세요.
+-- (Templates 테이블 정의 바로 위)
 
 local SoundService = game:GetService("SoundService")
 
 Library.Sounds = {
-    Hover = "rbxassetid://140527314975641",
-    Click = "rbxassetid://140527314975641",
-    Loading = "rbxassetid://140527314975641", -- 👈 로딩 사운드 ID 추가
+    Hover = "rbxassetid://136993031050456",
+    Click = "rbxassetid://139009780109934",
+    Loading = "rbxassetid://140527314975641",
+}
+
+-- 소리별 설정: 호버는 작고 높은 톤 / 클릭은 크고 낮은 톤으로 확실히 구분
+Library.SoundSettings = {
+    Hover = { Volume = 0.25, Pitch = 1.35, PitchRandom = 0.06, Cooldown = 0.05 },
+    Click = { Volume = 0.65, Pitch = 0.9,  PitchRandom = 0.04 },
+    Loading = { Volume = 0.6, Pitch = 1 },
 }
 
 local HoverSound = Instance.new("Sound")
+HoverSound.Name = "LibraryHoverSound"
 HoverSound.SoundId = Library.Sounds.Hover
-HoverSound.Volume = 0.4
+HoverSound.Volume = Library.SoundSettings.Hover.Volume
 HoverSound.Parent = SoundService
 
 local ClickSound = Instance.new("Sound")
+ClickSound.Name = "LibraryClickSound"
 ClickSound.SoundId = Library.Sounds.Click
-ClickSound.Volume = 0.5
+ClickSound.Volume = Library.SoundSettings.Click.Volume
 ClickSound.Parent = SoundService
 
--- 🔊 로딩 사운드 객체 생성
 local LoadingSound = Instance.new("Sound")
+LoadingSound.Name = "LibraryLoadingSound"
 LoadingSound.SoundId = Library.Sounds.Loading
-LoadingSound.Volume = 0.6
+LoadingSound.Volume = Library.SoundSettings.Loading.Volume
 LoadingSound.Parent = SoundService
+
+local LastHoverTime = 0
 
 function Library:PlayHoverSound()
     if Library.Muted then return end
-    HoverSound.PlaybackSpeed = 0.95 + math.random() * 0.1
+
+    local Settings = Library.SoundSettings.Hover
+    local Now = tick()
+    if Now - LastHoverTime < Settings.Cooldown then return end -- 연속 호버 소리 겹침 방지
+    LastHoverTime = Now
+
+    HoverSound.Volume = Settings.Volume
+    HoverSound.PlaybackSpeed = Settings.Pitch + (math.random() - 0.5) * 2 * Settings.PitchRandom
+    HoverSound.TimePosition = 0
     HoverSound:Play()
 end
 
 function Library:PlayClickSound()
     if Library.Muted then return end
-    ClickSound.PlaybackSpeed = 0.95 + math.random() * 0.1
+
+    local Settings = Library.SoundSettings.Click
+
+    HoverSound:Stop() -- 클릭할 때 호버 소리가 같이 남아있지 않게 끊음
+
+    ClickSound.Volume = Settings.Volume
+    ClickSound.PlaybackSpeed = Settings.Pitch + (math.random() - 0.5) * 2 * Settings.PitchRandom
+    ClickSound.TimePosition = 0
     ClickSound:Play()
 end
 
--- 🔊 로딩 사운드 재생 함수 추가
 function Library:PlayLoadingSound()
     if Library.Muted then return end
+
+    LoadingSound.Volume = Library.SoundSettings.Loading.Volume
+    LoadingSound.PlaybackSpeed = Library.SoundSettings.Loading.Pitch
     LoadingSound:Play()
 end
-
---// Templates \\--
-local Templates = {
-    --// UI \\--
-    Frame = {
-        BorderSizePixel = 0,
-    },
-    ImageLabel = {
-        BackgroundTransparency = 1,
-        BorderSizePixel = 0,
-    },
-    ImageButton = {
-        AutoButtonColor = false,
-        BorderSizePixel = 0,
-    },
-    ScrollingFrame = {
-        BorderSizePixel = 0,
-    },
-    TextLabel = {
-        BorderSizePixel = 0,
-        FontFace = "Font",
-        RichText = true,
-        TextColor3 = "FontColor",
-    },
-    TextButton = {
-        AutoButtonColor = false,
-        BorderSizePixel = 0,
-        FontFace = "Font",
-        RichText = true,
-        TextColor3 = "FontColor",
-    },
-    TextBox = {
-        BorderSizePixel = 0,
-        FontFace = "Font",
-        PlaceholderColor3 = function()
-            local H, S, V = Library.Scheme.FontColor:ToHSV()
-            return Color3.fromHSV(H, S, V / 2)
-        end,
-        Text = "",
-        TextColor3 = "FontColor",
-    },
-    UIListLayout = {
-        SortOrder = Enum.SortOrder.LayoutOrder,
-    },
-    UIStroke = {
-        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-    },
-
     --// Library \\--
     Window = {
         Title = "No Title",
