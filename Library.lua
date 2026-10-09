@@ -322,156 +322,96 @@ else
     Library.IsMobile = (Library.DevicePlatform == Enum.Platform.Android or Library.DevicePlatform == Enum.Platform.IOS)
     Library.OriginalMinSize = Library.IsMobile and Vector2.new(480, 240) or Vector2.new(480, 360)
 end
-
 --// Sound Effects \\--
--- 기존 "--// Sound Effects \\--" 블록 전체(Library:PlayLoadingSound 끝까지)를 이걸로 교체하세요.
--- 위치: Templates 테이블(local Templates = {) 바로 위
 
 local SoundService = game:GetService("SoundService")
-local ContentProvider = game:GetService("ContentProvider")
-
-Library.SoundVersion = 3
 
 Library.Sounds = {
-    Hover = "rbxassetid://136993031050456",
-    Click = "rbxassetid://139009780109934",
-    Loading = "rbxassetid://140527314975641",
+    Hover = "rbxassetid://100809160609628",
+    Click = "rbxassetid://100809160609628",
+    Loading = "rbxassetid://140207837688369", -- 👈 로딩 사운드 ID 추가
 }
 
--- Cooldown       : 이 시간(초) 안에 또 호출되면 무시 (중복 방지)
--- AfterClickMute : 클릭 직후 이 시간(초) 동안은 호버 소리를 내지 않음
-Library.SoundSettings = {
-    Hover = { Volume = 0.25, Pitch = 1.35, PitchRandom = 0.06, Cooldown = 0.08, AfterClickMute = 0.3 },
-    Click = { Volume = 0.65, Pitch = 0.9, PitchRandom = 0.04, Cooldown = 0.15 },
-    Loading = { Volume = 0.6, Pitch = 1, Cooldown = 0.5 },
-}
+local HoverSound = Instance.new("Sound")
+HoverSound.SoundId = Library.Sounds.Hover
+HoverSound.Volume = 0.4
+HoverSound.Parent = SoundService
 
--- true면 F9 콘솔에 "어느 코드가 소리를 불렀는지"가 찍힙니다.
--- 문제가 해결되면 false로 바꾸세요.
-Library.SoundDebug = true
+local ClickSound = Instance.new("Sound")
+ClickSound.SoundId = Library.Sounds.Click
+ClickSound.Volume = 0.5
+ClickSound.Parent = SoundService
 
-if Library.SoundDebug then
-    print("[Library] SoundEffects v" .. Library.SoundVersion .. " loaded")
-end
-
--- 이전 실행에서 남은 사운드 삭제 (스크립트를 다시 실행했을 때 소리가 겹치는 것 방지)
-local OldNames = {
-    LibraryHoverSound = true,
-    LibraryClickSound = true,
-    LibraryLoadingSound = true,
-}
-for _, Old in ipairs(SoundService:GetChildren()) do
-    if OldNames[Old.Name] then
-        Old:Destroy()
-    end
-end
-
-local function CreateSound(Name, SoundId, Volume)
-    local Sound = Instance.new("Sound")
-    Sound.Name = Name
-    Sound.SoundId = SoundId
-    Sound.Volume = Volume
-    Sound.Parent = SoundService
-    return Sound
-end
-
-local HoverSound = CreateSound("LibraryHoverSound", Library.Sounds.Hover, Library.SoundSettings.Hover.Volume)
-local ClickSound = CreateSound("LibraryClickSound", Library.Sounds.Click, Library.SoundSettings.Click.Volume)
-local LoadingSound = CreateSound("LibraryLoadingSound", Library.Sounds.Loading, Library.SoundSettings.Loading.Volume)
-
--- 미리 불러와서 첫 재생 때 소리가 몰려 나오는 것 방지 + 길이 확인
-task.spawn(function()
-    pcall(function()
-        ContentProvider:PreloadAsync({ HoverSound, ClickSound, LoadingSound })
-    end)
-
-    if Library.SoundDebug then
-        print(string.format(
-            "[Library] Hover %.2fs (loaded=%s) | Click %.2fs (loaded=%s) | Loading %.2fs (loaded=%s)",
-            HoverSound.TimeLength, tostring(HoverSound.IsLoaded),
-            ClickSound.TimeLength, tostring(ClickSound.IsLoaded),
-            LoadingSound.TimeLength, tostring(LoadingSound.IsLoaded)
-        ))
-    end
-end)
-
--- 마지막 재생 시각을 SoundService에 저장해서, 라이브러리를 다시 실행해
--- UI가 두 개 살아있어도 같은 쿨다운을 공유하게 함
-local function GetStamp(Key)
-    return SoundService:GetAttribute(Key) or 0
-end
-
-local function SetStamp(Key, Value)
-    SoundService:SetAttribute(Key, Value)
-end
-
-local function DebugPrint(Kind, Skipped)
-    if not Library.SoundDebug then return end
-    local Message = "[Library] " .. Kind .. (Skipped and " (중복이라 무시됨)" or " (재생)")
-    print(debug.traceback(Message, 3))
-end
+-- 🔊 로딩 사운드 객체 생성
+local LoadingSound = Instance.new("Sound")
+LoadingSound.SoundId = Library.Sounds.Loading
+LoadingSound.Volume = 0.6
+LoadingSound.Parent = SoundService
 
 function Library:PlayHoverSound()
     if Library.Muted then return end
-
-    local Settings = Library.SoundSettings.Hover
-    local Now = tick()
-
-    if Now - GetStamp("LibraryLastHover") < Settings.Cooldown
-        or Now - GetStamp("LibraryLastClick") < Settings.AfterClickMute then
-        DebugPrint("Hover", true)
-        return
-    end
-    SetStamp("LibraryLastHover", Now)
-    DebugPrint("Hover", false)
-
-    HoverSound:Stop()
-    HoverSound.Volume = Settings.Volume
-    HoverSound.PlaybackSpeed = Settings.Pitch + (math.random() - 0.5) * 2 * Settings.PitchRandom
-    HoverSound.TimePosition = 0
+    HoverSound.PlaybackSpeed = 0.95 + math.random() * 0.1
     HoverSound:Play()
 end
 
 function Library:PlayClickSound()
     if Library.Muted then return end
-
-    local Settings = Library.SoundSettings.Click
-    local Now = tick()
-
-    if Now - GetStamp("LibraryLastClick") < Settings.Cooldown then
-        DebugPrint("Click", true)
-        return
-    end
-    SetStamp("LibraryLastClick", Now)
-    DebugPrint("Click", false)
-
-    HoverSound:Stop() -- 클릭할 때 호버 소리가 같이 남아있지 않게 끊음
-    ClickSound:Stop()
-    ClickSound.Volume = Settings.Volume
-    ClickSound.PlaybackSpeed = Settings.Pitch + (math.random() - 0.5) * 2 * Settings.PitchRandom
-    ClickSound.TimePosition = 0
+    ClickSound.PlaybackSpeed = 0.95 + math.random() * 0.1
     ClickSound:Play()
 end
 
+-- 🔊 로딩 사운드 재생 함수 추가
 function Library:PlayLoadingSound()
     if Library.Muted then return end
-
-    local Settings = Library.SoundSettings.Loading
-    local Now = tick()
-
-    if Now - GetStamp("LibraryLastLoading") < Settings.Cooldown then
-        DebugPrint("Loading", true)
-        return
-    end
-    SetStamp("LibraryLastLoading", Now)
-    DebugPrint("Loading", false)
-
-    LoadingSound:Stop()
-    LoadingSound.Volume = Settings.Volume
-    LoadingSound.PlaybackSpeed = Settings.Pitch
-    LoadingSound.TimePosition = 0
     LoadingSound:Play()
 end
+
+--// Templates \\--
+local Templates = {
+    --// UI \\--
+    Frame = {
+        BorderSizePixel = 0,
+    },
+    ImageLabel = {
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+    },
+    ImageButton = {
+        AutoButtonColor = false,
+        BorderSizePixel = 0,
+    },
+    ScrollingFrame = {
+        BorderSizePixel = 0,
+    },
+    TextLabel = {
+        BorderSizePixel = 0,
+        FontFace = "Font",
+        RichText = true,
+        TextColor3 = "FontColor",
+    },
+    TextButton = {
+        AutoButtonColor = false,
+        BorderSizePixel = 0,
+        FontFace = "Font",
+        RichText = true,
+        TextColor3 = "FontColor",
+    },
+    TextBox = {
+        BorderSizePixel = 0,
+        FontFace = "Font",
+        PlaceholderColor3 = function()
+            local H, S, V = Library.Scheme.FontColor:ToHSV()
+            return Color3.fromHSV(H, S, V / 2)
+        end,
+        Text = "",
+        TextColor3 = "FontColor",
+    },
+    UIListLayout = {
+        SortOrder = Enum.SortOrder.LayoutOrder,
+    },
+    UIStroke = {
+        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+    },
 
     --// Library \\--
     Window = {
@@ -479,7 +419,7 @@ end
         Footer = "No Footer",
 
         Position = UDim2.fromOffset(6, 6),
-        Size = UDim2.fromOffset(800, 680),
+        Size = UDim2.fromOffset(600, 480),
         IconSize = UDim2.fromOffset(30, 30),
 
         AutoShow = true,
@@ -1761,25 +1701,6 @@ local ScreenGui = New("ScreenGui", {
 })
 ParentUI(ScreenGui)
 Library.ScreenGui = ScreenGui
-
---// Button Sounds (모든 버튼에 호버/클릭 소리를 한 곳에서 연결) \\--
-do
-    local function BindButtonSounds(Object)
-        if not Object:IsA("GuiButton") then return end
-
-        Object.MouseEnter:Connect(function()
-            Library:PlayHoverSound()
-        end)
-        Object.MouseButton1Click:Connect(function()
-            Library:PlayClickSound()
-        end)
-    end
-
-    for _, Object in ScreenGui:GetDescendants() do
-        BindButtonSounds(Object)
-    end
-    ScreenGui.DescendantAdded:Connect(BindButtonSounds)
-end
 
 ScreenGui.DescendantRemoving:Connect(function(Instance)
     task.defer(function()
