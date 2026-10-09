@@ -1762,6 +1762,25 @@ local ScreenGui = New("ScreenGui", {
 ParentUI(ScreenGui)
 Library.ScreenGui = ScreenGui
 
+--// Button Sounds (모든 버튼에 호버/클릭 소리를 한 곳에서 연결) \\--
+do
+    local function BindButtonSounds(Object)
+        if not Object:IsA("GuiButton") then return end
+
+        Object.MouseEnter:Connect(function()
+            Library:PlayHoverSound()
+        end)
+        Object.MouseButton1Click:Connect(function()
+            Library:PlayClickSound()
+        end)
+    end
+
+    for _, Object in ScreenGui:GetDescendants() do
+        BindButtonSounds(Object)
+    end
+    ScreenGui.DescendantAdded:Connect(BindButtonSounds)
+end
+
 ScreenGui.DescendantRemoving:Connect(function(Instance)
     task.defer(function()
         if Instance.Parent and Instance:IsDescendantOf(ScreenGui) then
