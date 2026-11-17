@@ -55,6 +55,13 @@
       "frames": 428,
       "duration": 14.245,
       "soundId": "rbxassetid://110861224788958"
+    },
+    {
+      "name": "Spectro",
+      "file": "spectro.json",
+      "frames": 231,
+      "duration": 7.667,
+      "soundId": "rbxassetid://109334206972931"
     }
   ]
 }
