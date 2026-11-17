@@ -1,0 +1,53 @@
+{
+  "dances": [
+    {
+      "name": "New Dance",
+      "file": "new-dance.json",
+      "frames": 541,
+      "duration": 18.004,
+      "soundId": "rbxassetid://117129960826417"
+    },
+    {
+      "name": "Hakari Dance",
+      "file": "hakari-dance.json",
+      "frames": 443,
+      "duration": 14.744,
+      "soundId": "rbxassetid://89537454004142"
+    },
+    {
+      "name": "Bare Minimum",
+      "file": "bare-minimum.json",
+      "frames": 569,
+      "duration": 18.942,
+      "soundId": "rbxassetid://81138852453815"
+    },
+    {
+      "name": "9MIN",
+      "file": "9min.json",
+      "frames": 496,
+      "duration": 16.509,
+      "soundId": "rbxassetid://138363366453851"
+    },
+    {
+      "name": "Miao Miao",
+      "file": "miao-miao.json",
+      "frames": 870,
+      "duration": 28.968,
+      "soundId": "rbxassetid://81953207770769"
+    },
+    {
+      "name": "Bloodpop",
+      "file": "bloodpop.json",
+      "frames": 873,
+      "duration": 29.07,
+      "soundId": "rbxassetid://85598290470163"
+    },
+    {
+      "name": "Her Name",
+      "file": "her-name.json",
+      "frames": 1361,
+      "duration": 45.334,
+      "soundId": "rbxassetid://133335548087502"
+    }
+  ]
+}
