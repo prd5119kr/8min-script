@@ -48,6 +48,13 @@
       "frames": 1361,
       "duration": 45.334,
       "soundId": "rbxassetid://133335548087502"
+    },
+    {
+      "name": "Aura Monster",
+      "file": "aura-monster.json",
+      "frames": 428,
+      "duration": 14.245,
+      "soundId": "rbxassetid://110861224788958"
     }
   ]
 }
