@@ -69,6 +69,13 @@
       "frames": 222,
       "duration": 7.37,
       "soundId": "rbxassetid://137485007909322"
+    },
+    {
+      "name": "Tokyo Drift",
+      "file": "tokyo-drift.json",
+      "frames": 444,
+      "duration": 14.771,
+      "soundId": "rbxassetid://86969284970579"
     }
   ]
 }
