@@ -83,6 +83,13 @@
       "frames": 701,
       "duration": 23.353,
       "soundId": "rbxassetid://107441393090206"
+    },
+    {
+      "name": "Alter Ego",
+      "file": "alter-ego.json",
+      "frames": 454,
+      "duration": 15.107,
+      "soundId": "rbxassetid://78768194146937"
     }
   ]
 }
