@@ -76,6 +76,13 @@
       "frames": 444,
       "duration": 14.771,
       "soundId": "rbxassetid://86969284970579"
+    },
+    {
+      "name": "Came Back n Back",
+      "file": "came-back-n-back.json",
+      "frames": 701,
+      "duration": 23.353,
+      "soundId": "rbxassetid://107441393090206"
     }
   ]
 }
