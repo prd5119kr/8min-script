@@ -90,6 +90,13 @@
       "frames": 454,
       "duration": 15.107,
       "soundId": "rbxassetid://78768194146937"
+    },
+    {
+      "name": "Boombox Dance",
+      "file": "boombox-dance.json",
+      "frames": 578,
+      "duration": 19.235,
+      "soundId": "rbxassetid://117045744169828"
     }
   ]
 }
