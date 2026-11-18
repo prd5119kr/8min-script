@@ -62,6 +62,13 @@
       "frames": 231,
       "duration": 7.667,
       "soundId": "rbxassetid://109334206972931"
+    },
+    {
+      "name": "Super Funk",
+      "file": "super-funk.json",
+      "frames": 222,
+      "duration": 7.37,
+      "soundId": "rbxassetid://137485007909322"
     }
   ]
 }
