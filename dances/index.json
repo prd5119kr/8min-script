@@ -97,6 +97,13 @@
       "frames": 578,
       "duration": 19.235,
       "soundId": "rbxassetid://117045744169828"
+    },
+    {
+      "name": "Nya",
+      "file": "nya.json",
+      "frames": 565,
+      "duration": 18.802,
+      "soundId": "rbxassetid://130164568743591"
     }
   ]
 }
