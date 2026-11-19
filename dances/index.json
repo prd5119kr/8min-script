@@ -104,6 +104,13 @@
       "frames": 565,
       "duration": 18.802,
       "soundId": "rbxassetid://130164568743591"
+    },
+    {
+      "name": "Forget",
+      "file": "forget.json",
+      "frames": 267,
+      "duration": 8.873,
+      "soundId": "rbxassetid://101263804802083"
     }
   ]
 }
