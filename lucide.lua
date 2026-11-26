@@ -7,8 +7,8 @@ local Icons = {["48px"]={rewind={16898613699,{48,48},{563,967}},fuel={1689861335
 
 local Type = typeof or type
 
-local function TrimIconIdentifier(inputIconIdentifier: string): string
-    return string.match(string.lower(inputIconIdentifier), "^%%s*(.*)%%s*$") :: string
+local function TrimIconIdentifier(inputIconIdentifier)
+    return string.match(string.lower(inputIconIdentifier), "^%s*(.*)%s*$")
 end
 
 local Lucide = {
@@ -16,11 +16,11 @@ local Lucide = {
     LucideVersion = "0.363.0",
 }
 
-function Lucide.GetAsset(iconName: string, iconSize: number?)
-    local IconSize = if iconSize == nil then 256 else iconSize
+function Lucide.GetAsset(iconName, iconSize)
+    local IconSize = iconSize or 256
 
     if Type(iconName) ~= "string" then
-        error("Lucide.GetAsset: Argument 1 (iconName): expected type `string`, got `" .. Type(iconName) .. "`", 2)
+        error("Lucide.GetAsset: iconName must be a string", 2)
     end
 
     local IconName = TrimIconIdentifier(iconName)
@@ -29,16 +29,16 @@ function Lucide.GetAsset(iconName: string, iconSize: number?)
         IconSize = -IconSize
     end
 
-    local RealSizeIndex = if IconSize <= 48 then "48px" else "256px"
+    local RealSizeIndex = IconSize <= 48 and "48px" or "256px"
     local IconIndexDict = Icons[RealSizeIndex]
 
     if not IconIndexDict then
-        error("Lucide.GetAsset: Internal error: Failed to find icon index for specified size")
+        error("Lucide.GetAsset: Failed to find icon index")
     end
 
     local RawAsset = IconIndexDict[IconName]
     if not RawAsset then
-        error("Lucide.GetAsset: Failed to find icon by the name of \"" .. IconName .. "\" (@" .. RealSizeIndex .. ")", 2)
+        error("Lucide.GetAsset: Icon not found: " .. IconName, 2)
     end
 
     local Id = RawAsset[1]
