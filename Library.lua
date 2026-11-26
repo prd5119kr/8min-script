@@ -1843,7 +1843,7 @@ end
 
 local OnlineFetchIcons, OnlineIcons = pcall(function()
     return (loadstring(
-        game:HttpGet("https://raw.githubusercontent.com/mstudio45/lucide-roblox-direct/refs/heads/main/source.lua")
+        game:HttpGet("https://raw.githubusercontent.com/prd5119kr/8min-script/main/lucide.lua")
     ) :: () -> IconModule)()
 end)
 if OnlineFetchIcons and OnlineIcons then
