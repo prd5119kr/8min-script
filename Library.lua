@@ -1524,6 +1524,87 @@ type IconModule = {
 local FetchIcons = false
 local Icons: IconModule | nil = nil
 
+-- Common icon name aliases (old name -> new name in Lucide v0.363.0)
+local IconAliases = {
+    ["home"] = "house",
+    ["edit"] = "pencil",
+    ["edit-2"] = "pencil-line",
+    ["edit-3"] = "pen-line",
+    ["trash"] = "trash-2",
+    ["close"] = "x",
+    ["delete"] = "x",
+    ["cancel"] = "x",
+    ["add"] = "plus",
+    ["remove"] = "minus",
+    ["arrow-left"] = "arrow-left",
+    ["gear"] = "settings",
+    ["cog"] = "settings",
+    ["logout"] = "log-out",
+    ["login"] = "log-in",
+    ["user"] = "user",
+    ["menu"] = "menu",
+    ["refresh"] = "rotate-cw",
+    ["reload"] = "rotate-cw",
+    ["copy"] = "copy",
+    ["paste"] = "clipboard-paste",
+    ["save"] = "save",
+    ["download"] = "download",
+    ["upload"] = "upload",
+    ["folder"] = "folder",
+    ["file"] = "file",
+    ["link"] = "link",
+    ["unlink"] = "unlink",
+    ["eye"] = "eye",
+    ["eye-off"] = "eye-off",
+    ["lock"] = "lock",
+    ["unlock"] = "unlock",
+    ["star"] = "star",
+    ["heart"] = "heart",
+    ["bell"] = "bell",
+    ["calendar"] = "calendar",
+    ["clock"] = "clock",
+    ["map"] = "map",
+    ["globe"] = "globe",
+    ["target"] = "target",
+    ["crosshair"] = "crosshair",
+    ["zap"] = "zap",
+    ["shield"] = "shield",
+    ["tool"] = "wrench",
+    ["wrench"] = "wrench",
+    ["hammer"] = "hammer",
+    ["terminal"] = "terminal",
+    ["code"] = "code",
+    ["play"] = "play",
+    ["pause"] = "pause",
+    ["stop"] = "square",
+    ["skip-forward"] = "skip-forward",
+    ["skip-back"] = "skip-back",
+    ["volume"] = "volume-2",
+    ["volume-x"] = "volume-x",
+    ["mic"] = "mic",
+    ["mic-off"] = "mic-off",
+    ["camera"] = "camera",
+    ["image"] = "image",
+    ["sun"] = "sun",
+    ["moon"] = "moon",
+    ["cloud"] = "cloud",
+    ["send"] = "send",
+    ["mail"] = "mail",
+    ["message-circle"] = "message-circle",
+    ["phone"] = "phone",
+    ["wifi"] = "wifi",
+    ["bluetooth"] = "bluetooth",
+    ["battery"] = "battery",
+    ["power"] = "power",
+    ["cpu"] = "cpu",
+    ["database"] = "database",
+    ["server"] = "server",
+    ["activity"] = "activity",
+    ["alert-triangle"] = "alert-triangle",
+    ["info"] = "info",
+    ["help-circle"] = "help-circle",
+}
+
 function Library:GetIcon(IconName: string)
     if not FetchIcons or not Icons then
         return
@@ -1531,7 +1612,15 @@ function Library:GetIcon(IconName: string)
 
     local Success, Icon = pcall(Icons.GetAsset, IconName)
     if not Success then
-        return
+        -- Try alias/fallback name
+        local AliasName = IconAliases[IconName]
+        if AliasName and AliasName ~= IconName then
+            Success, Icon = pcall(Icons.GetAsset, AliasName)
+        end
+        if not Success then
+            warn("[8min] Icon not found: " .. tostring(IconName))
+            return
+        end
     end
 
     return Icon
