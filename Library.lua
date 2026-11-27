@@ -1526,7 +1526,11 @@ local Icons: IconModule | nil = nil
 
 -- Common icon name aliases (old name -> new name in Lucide v0.363.0)
 local IconAliases = {
-    ["home"] = "house",
+    ["house"] = "home",
+    ["home"] = "home",
+    ["shield-user"] = "shield",
+    ["waves-horizontal"] = "waves",
+    ["zodiac-aquarius"] = "star",
     ["edit"] = "pencil",
     ["edit-2"] = "pencil-line",
     ["edit-3"] = "pen-line",
