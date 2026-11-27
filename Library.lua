@@ -1655,6 +1655,7 @@ function Library:GetCustomIcon(IconName: string): any
         return LucideIcon
     end
 
+    warn("[8min] GetCustomIcon failed for:", IconName, "| FetchIcons:", FetchIcons, "| Icons loaded:", Icons ~= nil)
     return nil
 end
 
@@ -1937,6 +1938,9 @@ local OnlineFetchIcons, OnlineIcons = pcall(function()
 end)
 if OnlineFetchIcons and OnlineIcons then
     Library:SetIconModule(OnlineIcons)
+    warn("[8min] Lucide icons loaded successfully, FetchIcons =", FetchIcons)
+else
+    warn("[8min] Failed to load Lucide icons:", OnlineIcons)
 end
 
 --// Lib Functions \\--
